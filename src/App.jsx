@@ -1,46 +1,29 @@
 import React, { useState } from 'react'
 import { ImSpinner2 } from "react-icons/im";
+import Loading from './components/Loading';
 
 const App = () => {
 
-  const [state, setState] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
 
+  const [isLoading, setIsLoading] = useState(true)
 
+  setTimeout(() => {
+    setIsLoading(false)
+  }, 4000)
 
   return (
-    <div>
+    <>
 
-      <h1>Portfolio</h1>
-      <style>{`
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        .spinning {
-          animation: spin 1s linear infinite;
-        }
-      `}</style>
+      {isLoading && (
 
-
-      <button className='' onClick={() => {
-        setState('clicked')
-        setIsLoading(true)
-        setTimeout(() =>{
-           setIsLoading(false)
-           setState('')
-
-        } ,3000)
-
-      }}>
-        {isLoading?<ImSpinner2 className='spinning' />:''}  Click me
-      </button>
-
-
-
-      <p>Button state: {state}</p>
-    </div>
+        <div className=' h-screen flex items-center justify-center bg-black'>
+          <Loading />
+        </div>
+      )}
+    </>
   )
 }
+
+
 
 export default App
