@@ -1,54 +1,42 @@
-import React, { useState } from 'react'
-import Loading from './components/Loading';
-import { Route, Routes, useNavigate } from 'react-router-dom';
-import Home from './pages/Home';
+import React, { useState, useEffect } from 'react'
+import Loading from './components/Loading'
+import Home from './pages/Home'
 
 const App = () => {
-
-
   const [isLoading, setIsLoading] = useState(true)
-  const navigate = useNavigate()
+  const [fadeOut, setFadeOut] = useState(false)
 
+  useEffect(() => {
+    const fadeTimer = setTimeout(() => {
+      setFadeOut(true)
+    }, 2500)
 
-  setTimeout(() => {
-    setIsLoading(false)
+    const hideTimer = setTimeout(() => {
+      setIsLoading(false)
+    }, 3200)
 
-  }, 4000)
+    return () => {
+      clearTimeout(fadeTimer)
+      clearTimeout(hideTimer)
+    }
+  }, [])
 
+  if (isLoading) {
+    return (
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center"
+        style={{
+          background: 'var(--bg-primary)',
+          opacity: fadeOut ? 0 : 1,
+          transition: 'opacity 0.7s ease-out',
+        }}
+      >
+        <Loading />
+      </div>
+    )
+  }
 
-
-
-
-
-
-
-  return (
-    <>
-
-
-      <Routes>
-        <Route path="/" element={
-          isLoading ? (
-            <div className=' h-screen flex items-center justify-center bg-black'>
-              <h1 className='text-white text-4xl font-bold'>Hello...</h1>
-            </div>
-          ) : (
-            <div className=' h-screen flex items-center justify-center bg-black'>
-              <Loading />
-              {setTimeout(() => {
-                navigate("/home") 
-              }, 4000)}
-            </div>
-          )
-        } />
-        <Route path="/home" element={
-          <Home/>
-        } />
-      </Routes>
-    </>
-  )
+  return <Home />
 }
-
-
 
 export default App
